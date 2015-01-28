@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}create item {% endblock %}
+{% block content %}
+<div class="jumbotron" id="#form">
+<form action="{% url 'add_multitems' %}" method="post">
+{% csrf_token %}
+<textarea name="data" ></textarea>
+<input type="submit" value="valide" />
+</form>
+</div>
+{% endblock %}

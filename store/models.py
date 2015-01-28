@@ -15,11 +15,11 @@ class Bill(models.Model):
     created_at = models.DateTimeField()
 
 class Bill_table(models.Model):
-	bill_id = models.ForeignKey(Bill)
-	comment = models.CharField(max_length=200)
-	created_at = models.DateTimeField()
-	is_pay = models.BooleanField(default=False)
+    bill_id = models.ForeignKey(Bill)
+    comment = models.CharField(max_length=200)
+    created_at = models.DateTimeField()
+    is_pay = models.BooleanField(default=False)
 
-	def save(self, *args, **kwaigs):
-		self.created_at = timezone.now()
-		super(Bill_table, self).save(*args, **kwaigs)
+    def save(self, *args, **kwaigs):
+        self.created_at = timezone.now()
+        super(Bill_table, self).save(*args, **kwaigs)
