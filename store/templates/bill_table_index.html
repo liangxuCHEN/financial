@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Bill_table{% endblock %}
+
+{% block content %}
+<div class="jumbotron" id="#error">
+{% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+            <div class="alert alert-error">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+        <div class="alert alert-error">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+</div>
+<div class="jumbotron" id="table">
+{% if bill_table_list %}
+ <table class="table">
+   <thead>
+     <tr><td>#</td><td>日期</td><td>备注</td><td>总价</td><td>状态</td></tr>
+   </thead>
+   <tbody>
+  {% for bill_table in bill_table_list %}
+  	<tr>
+  	<td>{{bill_table.id}}</td>
+  	<td>{{bill_table.created_at}}</td>
+  	<td>{{bill_table.comment}}</td>
+  	<td>{{bill_table.total_price}}</td>
+    <td>{{bill_table.is_pay}}</td>
+  	</tr>
+  {% endfor %}
+ </tbody>
+ </table>
+ {% endif %}
+ </div>
+ <div class="jumbotron" id="#form">
+<form action="{% url 'add_bill_table' %}" method="post">
+{% csrf_token %}
+<div class="form-group">
+      <label class="col-sm-2 control-label">备注</label>
+      <div class="col-sm-10">
+         <input type="text" class="form-control" name="comment" placeholder="添加备注" />
+      </div>
+</div>
+<input type="submit" value="新建账单" class="btn btn-primary"/>
+</form>
+</div>
+{% endblock %}

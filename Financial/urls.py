@@ -1,13 +1,16 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
+from django.views.generic import TemplateView
 from store import views
 
 urlpatterns = patterns('',
     # Examples:
-    #url(r'^$', 'Financial.views.home', name='home'),
+    url(r'^$', TemplateView.as_view(template_name="index.html")),
     # url(r'^blog/', include('blog.urls')),
     url(r'^item$',  views.item_index, name='item_index'),
     url(r'^item_creat$',  views.add_one_item, name='add_one_item'),
     url(r'^multitem_creat$',  views.add_multitems, name='add_multitems'),
+    url(r'^bill_table$',  views.bill_table_index, name='bill_table_index'),
+    url(r'^bill_table_create$',  views.add_bill_table, name='add_bill_table'),
     url(r'^admin/', include(admin.site.urls)),
 )

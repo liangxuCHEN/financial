@@ -3,7 +3,8 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from models import Item, Bill, Bill_table
 from django import forms
-from forms import ItemForm
+from forms import ItemForm, BillTableForm
+
 
 #move to tool.py
 def save_mul_item(text):
@@ -52,3 +53,18 @@ def add_multitems(request):
     else:
         return render(request, 'multitem_create.html')
 
+def bill_table_index(request):
+    content = {}
+    bill_tables = Bill_table.objects.filter()
+    content['bill_table_list'] = bill_tables
+    return render(request, 'bill_table_index.html', content)
+
+def add_bill_table(request):
+    if request.method == 'POST':
+        data = request.POST
+        print data
+        form = BillTableForm(data)
+        form.save()
+        return HttpResponseRedirect('bill_table')
+    else:
+        return HttpResponseRedirect('bill_table')

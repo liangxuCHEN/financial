@@ -8,18 +8,23 @@ class Item(models.Model):
     name = models.CharField(max_length=50)
     price = models.FloatField()
 
-class Bill(models.Model):
-    item_code = models.ForeignKey(Item)
-    bill_comment = models.CharField(max_length=200)
-    number = models.IntegerField()
-    created_at = models.DateTimeField()
-
 class Bill_table(models.Model):
-    bill_id = models.ForeignKey(Bill)
-    comment = models.CharField(max_length=200)
+    comment = models.CharField(max_length=200, null=True)
     created_at = models.DateTimeField()
     is_pay = models.BooleanField(default=False)
+    total_price = models.FloatField(default=0)
 
     def save(self, *args, **kwaigs):
         self.created_at = timezone.now()
         super(Bill_table, self).save(*args, **kwaigs)
+
+class Bill(models.Model):
+    item_code = models.ForeignKey(Item)
+    bill_table = models.ForeignKey(Bill_table)
+    bill_comment = models.CharField(max_length=200, null=True)
+    number = models.IntegerField()
+    created_at = models.DateTimeField()
+
+
+
+
