@@ -12,5 +12,8 @@ urlpatterns = patterns('',
     url(r'^multitem_creat$',  views.add_multitems, name='add_multitems'),
     url(r'^bill_table$',  views.bill_table_index, name='bill_table_index'),
     url(r'^bill_table_create$',  views.add_bill_table, name='add_bill_table'),
+    url(r'^bill_table_detail/(?P<table_id>\d+)/$', views.bill_table_detail, name='bill_table_detail'),
+    url(r'^edit_bill_table/(?P<table_id>\d+)/$', views.edit_bill_table, name='edit_bill_table'),
+    url(r'^add_bill$', views.add_bill, name='add_bill'),
     url(r'^admin/', include(admin.site.urls)),
 )

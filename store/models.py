@@ -14,10 +14,6 @@ class Bill_table(models.Model):
     is_pay = models.BooleanField(default=False)
     total_price = models.FloatField(default=0)
 
-    def save(self, *args, **kwaigs):
-        self.created_at = timezone.now()
-        super(Bill_table, self).save(*args, **kwaigs)
-
 class Bill(models.Model):
     item_code = models.ForeignKey(Item)
     bill_table = models.ForeignKey(Bill_table)

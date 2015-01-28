@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}Bill table Detail{% endblock %}
+
+{% block content %}
+<div class="jumbotron" id="#error">
+{% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+            <div class="alert alert-error">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+        <div class="alert alert-error">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+</div>
+<div class="jumbotron" id="table">
+{% if bill_list %}
+ <table class="table table-hover">
+   <thead>
+     <tr><td>#</td><td>时间</td><td>备注</td><td>数量</td><td>单价</td><td>合计</td><td>操作</td></tr>
+   </thead>
+   <tbody>
+  {% for bill in bill_list %}
+  	<tr>
+  	<td>{{bill.id}}</td>
+  	<td>{{bill.created_at}}</td>
+  	<td>{{bill.bill_comment}}</td>
+  	<td>{{bill.number}}</td>
+    <td>{{ bill.item_code.price}}</td>
+    <td><script type="text/javascript">document.write({{ bill.number}} * {{ bill.item_code.price}})</script></td>
+    <td><button class="btn btn-danger">删除</button></td>
+  	</tr>
+  {% endfor %}
+ </table>
+ {% endif %}
+ <p class="bg-info">总价 : {{ bill_table.total_price }}</p>
+ </div>
+
+
+ <div class="jumbotron" id="#add-bill">
+<form role="form" action="{% url 'add_bill' %}" method="post" class="form-horizontal" >
+{% csrf_token %}
+<div class="form-group">
+      <label class="col-sm-2 control-label">编码</label>
+      <div class="col-sm-10">
+         <input type="text" class="form-control" name="item_code" placeholder="添加产品编码"/>
+      </div>
+</div>
+<div class="form-group">
+      <label class="col-sm-2 control-label">数量</label>
+      <div class="col-sm-10">
+         <input type="text" class="form-control" name="number" placeholder="产品数量"/>
+      </div>
+</div>
+<div class="form-group">
+      <label class="col-sm-2 control-label">备注</label>
+      <div class="col-sm-10">
+         <input type="text" class="form-control" name="bill_comment" placeholder="添加备注"/>
+      </div>
+</div>
+ 
+<!--<script type="text/javascript">document.write('<input type="hidden" name="created_at" value=Date()></input>')</script>-->
+         <input type="hidden" name="bill_table" value="{{bill_table.id}}" />
+
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+    <input type="submit" value="添加" class="btn btn-primary"/>
+    </div>
+</div>
+</form>
+</div>
+
+
+ <div class="jumbotron" id="#form">
+<form role="form" action="{% url 'edit_bill_table' bill_table.id %}" method="post" class="form-horizontal" >
+{% csrf_token %}
+<div class="form-group">
+      <label class="col-sm-2 control-label">账单备注</label>
+      <div class="col-sm-10">
+         <input type="text" class="form-control" name="comment" value="{{bill_table.comment}}" />
+      </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+    <input type="submit" value="提交" class="btn btn-primary"/>
+    </div>
+</div>
+</form>
+</div>
+{% endblock %}
