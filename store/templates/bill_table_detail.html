@@ -1,6 +1,26 @@
 {% extends "base.html" %}
+{%block head %}
 {% block title %}Bill table Detail{% endblock %}
-
+<script type="text/javascript">
+function delete_bill(bill_id)
+  {
+  var name=prompt("请输入您的名字","Liangxu");
+  if (name!=null && name!="")
+  {
+    self.location="/delete_bill/"+bill_id+"/{{bill_table.id}}";
+    document.getElementById(bill_id).hidden = true;
+  }
+}
+</script>
+{% endblock %}
+{% block nav %}
+<div class="navbar-collapse collapse">
+    <ul class="nav navbar-nav">
+        <li ><a href="{%url 'item_index' %}">产品列表</a></li>
+        <li ><a href="{%url 'bill_table_index' %}">账单</a></li>
+    </ul>
+</div>
+{% endblock %}
 {% block content %}
 <div class="jumbotron" id="#error">
 {% if form.errors %}
@@ -22,18 +42,25 @@
 {% if bill_list %}
  <table class="table table-hover">
    <thead>
-     <tr><td>#</td><td>时间</td><td>备注</td><td>数量</td><td>单价</td><td>合计</td><td>操作</td></tr>
+     <tr><td>名字</td><td>编码</td><td>数量</td><td>单价</td><td>合计</td><td>时间</td><td>备注</td><td>操作</td></tr>
    </thead>
    <tbody>
   {% for bill in bill_list %}
-  	<tr>
-  	<td>{{bill.id}}</td>
-  	<td>{{bill.created_at}}</td>
-  	<td>{{bill.bill_comment}}</td>
+  	<tr id="{{bill.id}}">
+  	<td>{{ bill.item_code.name}}</td>
+    <td>{{ bill.item_code.code}}</td>
   	<td>{{bill.number}}</td>
     <td>{{ bill.item_code.price}}</td>
-    <td><script type="text/javascript">document.write({{ bill.number}} * {{ bill.item_code.price}})</script></td>
-    <td><button class="btn btn-danger">删除</button></td>
+    <td>
+    <script type="text/javascript">
+      price = {{ bill.number}} * {{ bill.item_code.price}};
+      var num = new Number(price);
+      document.write(num.toFixed(2));
+    </script>
+    </td>
+    <td>{{bill.created_at}}</td>
+    <td><a href="{% url 'delete_bill' bill.id bill_table.id %}" id="delete_bill">{{bill.bill_comment}}</a></td>
+    <td><button onclick="delete_bill({{bill.id}})" class="btn btn-danger">删除</button></td>
   	</tr>
   {% endfor %}
  </table>
@@ -48,13 +75,13 @@
 <div class="form-group">
       <label class="col-sm-2 control-label">编码</label>
       <div class="col-sm-10">
-         <input type="text" class="form-control" name="item_code" placeholder="添加产品编码"/>
+         <input type="number" class="form-control" name="item_code" placeholder="添加产品编码" required="required"/>
       </div>
 </div>
 <div class="form-group">
       <label class="col-sm-2 control-label">数量</label>
       <div class="col-sm-10">
-         <input type="text" class="form-control" name="number" placeholder="产品数量"/>
+         <input type="number" class="form-control" name="number" placeholder="产品数量" required="required"/>
       </div>
 </div>
 <div class="form-group">
@@ -85,6 +112,19 @@
          <input type="text" class="form-control" name="comment" value="{{bill_table.comment}}" />
       </div>
 </div>
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <div class="checkbox">
+          <label>
+          {% if bill_table.is_pay %}
+          <input type="checkbox" name="is_pay" checked="checked"> 已付款
+          {% else %}
+          <input type="checkbox" name="is_pay" > 已付款
+          {% endif %}
+          </label>
+        </div> 
+    </div>
+</div> 
 <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
     <input type="submit" value="提交" class="btn btn-primary"/>

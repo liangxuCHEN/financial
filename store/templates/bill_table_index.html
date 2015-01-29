@@ -1,6 +1,13 @@
 {% extends "base.html" %}
 {% block title %}Bill_table{% endblock %}
-
+{% block nav %}
+<div class="navbar-collapse collapse">
+    <ul class="nav navbar-nav">
+        <li ><a href="{%url 'item_index' %}">产品列表</a></li>
+        <li ><a href="{%url 'bill_table_index' %}">账单</a></li>
+    </ul>
+</div>
+{% endblock %}
 {% block content %}
 <div class="jumbotron" id="#error">
 {% if form.errors %}
@@ -31,7 +38,11 @@
   	<td>{{bill_table.created_at}}</td>
   	<td>{{bill_table.comment}}</td>
   	<td>{{bill_table.total_price}}</td>
-    <td>{{bill_table.is_pay}}</td>
+    {% if bill_table.is_pay %}
+    <td>已付款</td>
+    {% else %}
+    <td>未付款</td>
+    {% endif %}
     <td><a href="{% url 'bill_table_detail' bill_table.id %}">编辑</a></td>
   	</tr>
   {% endfor %}
@@ -40,7 +51,7 @@
  {% endif %}
  </div>
  <div class="jumbotron" id="#form">
-<form action="{% url 'add_bill_table' %}" method="post">
+<form action="{% url 'add_bill_table' %}" method="post" class="form-horizontal" role="form">
 {% csrf_token %}
 <div class="form-group">
       <label class="col-sm-2 control-label">备注</label>
@@ -48,7 +59,11 @@
          <input type="text" class="form-control" name="comment" placeholder="添加备注" />
       </div>
 </div>
-<input type="submit" value="新建账单" class="btn btn-primary"/>
+<div class="form-group">
+  <div class="col-sm-offset-2 col-sm-10">
+    <input type="submit" value="新建账单" class="btn btn-primary"/>
+  </div>
+</div>
 </form>
 </div>
 {% endblock %}

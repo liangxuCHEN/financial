@@ -76,15 +76,25 @@ def edit_bill_table(request, table_id):
         bill_table = Bill_table.objects.get(id=table_id)
         if data['comment']:
             bill_table.comment = data['comment']
-            bill_table.save()
+        else:
+            bill_table.comment = ""
+        if 'is_pay' in data:
+            bill_table.is_pay = True
+        else:
+            bill_table.is_pay = False
+        bill_table.save()
         return redirect('/bill_table')
     else:
         return redirect('/bill_table')
 
 def bill_table_detail(request, table_id):
     content = {}
+    items = Item.objects.filter()
+    code = []
+    for item in items:
+        code.append(item.code)
+    content["code"] =code
     content['bill_list'] = Bill.objects.filter(bill_table_id=table_id)
-    
     total_price = 0
     for bill in content['bill_list']:
         total_price += bill.number * bill.item_code.price
@@ -98,9 +108,16 @@ def bill_table_detail(request, table_id):
 def add_bill(request):
     if request.method == 'POST':
         data = request.POST
-        print data
-        form = BillForm(data)
-        form.save()
-        return redirect("/bill_table_detail/"+data['bill_table'])
+        if Item.objects.filter(id=data['item_code']):
+            form = BillForm(data)
+            form.save()
+            return redirect("/bill_table_detail/"+data['bill_table'])
+        else:
+            return redirect("/bill_table_detail/"+data['bill_table'])
     else:
         return redirect("/bill_table_detail/"+data['bill_table'])
+
+def delete_bill(request, bill_id, table_id):
+    bill = Bill.objects.get(id=bill_id)
+    bill.delete()
+    return redirect("/bill_table_detail/"+table_id)
