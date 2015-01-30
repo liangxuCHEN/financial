@@ -5,7 +5,7 @@ from models import Item, Bill, Bill_table
 from django import forms
 from forms import ItemForm, BillTableForm,BillForm
 from django.utils import timezone
-
+from django.core.paginator import Paginator, InvalidPage, EmptyPage
 
 #move to tool.py
 def save_mul_item(text):
@@ -96,6 +96,7 @@ def bill_table_detail(request, table_id):
     for item in items:
         code.append(item.code)
     content["code"] =code
+    print content["code"]
     content['bill_list'] = Bill.objects.filter(bill_table_id=table_id)
     total_price = 0
     for bill in content['bill_list']:
@@ -110,7 +111,7 @@ def bill_table_detail(request, table_id):
 def add_bill(request):
     if request.method == 'POST':
         data = request.POST
-        if Item.objects.filter(id=data['item_code']):
+        if Item.objects.filter(code=data['item_code']):
             form = BillForm(data)
             form.save()
             return redirect("/bill_table_detail/%s/?info=%s" % (data['bill_table'], "success"))

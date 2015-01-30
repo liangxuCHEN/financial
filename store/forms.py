@@ -24,7 +24,7 @@ class BillForm(forms.ModelForm):
 
     def save(self): # create new bill
         new_table=Bill.objects.create(
-            item_code=Item.objects.get(id=self.data['item_code']),
+            item_code=Item.objects.get(code=self.data['item_code']),
             bill_table=Bill_table.objects.get(id=self.data['bill_table']),
             created_at=timezone.now(),
             number=self.data['number'],

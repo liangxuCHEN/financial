@@ -11,6 +11,7 @@
 {% block content %}
 <script type="text/javascript">
   var no_pay_price = 0.0;
+  var pay_price = 0.0;
 </script>
 <div class="jumbotron" id="#error">
 {% if form.errors %}
@@ -42,7 +43,11 @@
   	<td>{{bill_table.comment}}</td>
   	<td>{{bill_table.total_price}}</td>
     {% if bill_table.is_pay %}
-    <td>已付款</td>
+    <td>已付款
+      <script type="text/javascript">
+        pay_price = {{ bill_table.total_price }} + pay_price;
+      </script>
+    </td>
     {% else %}
     <td>
       未付款
@@ -59,9 +64,9 @@
  {% endif %}
 
  <p class="bg-info">
-   未付款: 
    <script type="text/javascript">
-      document.write(no_pay_price);
+   var total_price = no_pay_price + pay_price
+      document.write('未付款: '+ no_pay_price + '<br />' + '已付款: '+ pay_price + '<br />' + '合计: '+ total_price);
   </script>
 </p>
  
