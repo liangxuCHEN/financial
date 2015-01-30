@@ -56,8 +56,21 @@ def add_multitems(request):
 
 def bill_table_index(request):
     content = {}
-    bill_tables = Bill_table.objects.filter()
-    content['bill_table_list'] = bill_tables
+    bill_tables = Bill_table.objects.all()
+    #pages
+    page_size = 10 
+    paginator = Paginator(bill_tables, page_size)
+    try:
+        page = int(request.GET.get('page','1'))
+    except ValueError:
+        page = 1
+    
+    try:
+        bill_table_page = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        bill_table_page = paginator.page(paginator.num_pages)
+
+    content['bill_table_list'] = bill_table_page
     return render(request, 'bill_table_index.html', content)
 
 def add_bill_table(request):
@@ -91,7 +104,7 @@ def bill_table_detail(request, table_id):
     content = {}
     if 'info' in request.GET:
         content['info'] = request.GET['info']
-    items = Item.objects.filter()
+    items = Item.objects.all()
     code = []
     for item in items:
         code.append(item.code)
