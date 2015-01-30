@@ -89,6 +89,8 @@ def edit_bill_table(request, table_id):
 
 def bill_table_detail(request, table_id):
     content = {}
+    if 'info' in request.GET:
+        content['info'] = request.GET['info']
     items = Item.objects.filter()
     code = []
     for item in items:
@@ -111,11 +113,14 @@ def add_bill(request):
         if Item.objects.filter(id=data['item_code']):
             form = BillForm(data)
             form.save()
-            return redirect("/bill_table_detail/"+data['bill_table'])
+            return redirect("/bill_table_detail/%s/?info=%s" % (data['bill_table'], "success"))
         else:
-            return redirect("/bill_table_detail/"+data['bill_table'])
+            #print "/bill_table_detail/%s/?info=%s" % (data['bill_table'], data['item_code']+" doesn't exsite")
+            return redirect("/bill_table_detail/%s/?info=%s" % (data['bill_table'], data['item_code']+" doesn't exsite"))
+            #info = data['item_code']+" doesn't exsite"
+            #return redirect("/bill_table_detail/"+data['bill_table'], info=info)
     else:
-        return redirect("/bill_table_detail/"+data['bill_table'])
+        return redirect("/bill_table_detail/%s" % (data['bill_table']))
 
 def delete_bill(request, bill_id, table_id):
     bill = Bill.objects.get(id=bill_id)
