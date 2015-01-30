@@ -9,6 +9,9 @@
 </div>
 {% endblock %}
 {% block content %}
+<script type="text/javascript">
+  var no_pay_price = 0.0;
+</script>
 <div class="jumbotron" id="#error">
 {% if form.errors %}
     {% for field in form %}
@@ -41,7 +44,12 @@
     {% if bill_table.is_pay %}
     <td>已付款</td>
     {% else %}
-    <td>未付款</td>
+    <td>
+      未付款
+      <script type="text/javascript">
+        no_pay_price = {{ bill_table.total_price }} + no_pay_price;
+      </script>
+    </td>
     {% endif %}
     <td><a href="{% url 'bill_table_detail' bill_table.id %}">编辑</a></td>
   	</tr>
@@ -49,6 +57,14 @@
  </tbody>
  </table>
  {% endif %}
+
+ <p class="bg-info">
+   未付款: 
+   <script type="text/javascript">
+      document.write(no_pay_price);
+  </script>
+</p>
+ 
  </div>
  <div class="jumbotron" id="#form">
 <form action="{% url 'add_bill_table' %}" method="post" class="form-horizontal" role="form">
