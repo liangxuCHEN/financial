@@ -7,6 +7,15 @@ class ItemForm(forms.ModelForm):
         model = Item
         fields = ['code', 'name', 'price']
 
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        code = cleaned_data.get('code')
+
+        if Item.objects.filter(code=code).exists():
+            self._errors['code'] = self.error_class(['this code exists'])  
+
+        return cleaned_data
+
 class BillTableForm(forms.ModelForm):
     class Meta:
         model = Bill_table

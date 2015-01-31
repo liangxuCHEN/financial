@@ -1,7 +1,7 @@
         var oInputField;    
         var oPopDiv;  
         var oItem_ul;  
-        var aItems = ['101', '103', '102', '123', '302', '405'];  
+        var aItems = ['101', '103', '102', '123', '302', '405', '302'];  
         aItems.sort();  //按字母排序  
         function initVars(){  
             //初始化变量  

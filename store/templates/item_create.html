@@ -17,7 +17,8 @@
     {% endfor %}
 {% endif %}
 </div>
-<div class="jumbotron" id="#form">
+
+
 <form role="form" action="{% url 'add_one_item' %}" method="post">
 {% csrf_token %}
 <div class="form-group">
@@ -38,7 +39,12 @@
          <input type="text" class="form-control" name="price" placeholder="请输入产品价格">
       </div>
 </div>
-<input type="submit" value="valide" class="btn btn-primary"/>
-</form>
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <input type="submit" value="valide" class="btn btn-primary"/>
+    </div>
 </div>
+</form>
+
+
 {% endblock %}

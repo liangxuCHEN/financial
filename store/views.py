@@ -56,7 +56,20 @@ def add_multitems(request):
 
 def bill_table_index(request):
     content = {}
-    bill_tables = Bill_table.objects.all()
+    if request.method == 'POST':
+        bill_tables = Bill_table.objects.all()
+
+        has_pay = request.POST.get('has_pay','')
+        if has_pay == "pay":
+            bill_tables = bill_tables.filter(is_pay=True)
+        if has_pay == "no_pay":
+            bill_tables = bill_tables.filter(is_pay=False)
+
+        order_date = request.POST.get('order_date','down')
+        if order_date == "down":
+            bill_tables = bill_tables.order_by("-created_at")
+    else:
+        bill_tables = Bill_table.objects.all().order_by("-created_at")
     #pages
     page_size = 10 
     paginator = Paginator(bill_tables, page_size)
