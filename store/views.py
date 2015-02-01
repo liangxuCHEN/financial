@@ -1,3 +1,4 @@
+ #-*- coding: utf-8 -*-
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
@@ -55,23 +56,21 @@ def add_multitems(request):
         return render(request, 'multitem_create.html')
 
 def bill_table_index(request):
+    print '=======bill_table_index====='
     content = {}
-    if request.method == 'POST':
-        bill_tables = Bill_table.objects.all()
+    bill_tables = Bill_table.objects.all()
 
-        has_pay = request.POST.get('has_pay','')
-        if has_pay == "pay":
-            bill_tables = bill_tables.filter(is_pay=True)
-        if has_pay == "no_pay":
-            bill_tables = bill_tables.filter(is_pay=False)
+    has_pay = request.GET.get('has_pay','')
+    if has_pay == "pay":
+        bill_tables = bill_tables.filter(is_pay=True)
+    if has_pay == "no_pay":
+        bill_tables = bill_tables.filter(is_pay=False)
 
-        order_date = request.POST.get('order_date','down')
-        if order_date == "down":
-            bill_tables = bill_tables.order_by("-created_at")
-    else:
-        bill_tables = Bill_table.objects.all().order_by("-created_at")
+    order_date = request.GET.get('order_date','down')
+    if order_date == "down":
+        bill_tables = bill_tables.order_by("-created_at")
     #pages
-    page_size = 10 
+    page_size =  10
     paginator = Paginator(bill_tables, page_size)
     try:
         page = int(request.GET.get('page','1'))
@@ -87,6 +86,7 @@ def bill_table_index(request):
     return render(request, 'bill_table_index.html', content)
 
 def add_bill_table(request):
+    print '=======add_bill_table====='
     if request.method == 'POST':
         data = request.POST
         print data
@@ -94,9 +94,11 @@ def add_bill_table(request):
         form.save()
         return HttpResponseRedirect('bill_table')
     else:
+        print 'add_bill_table no post'
         return HttpResponseRedirect('bill_table')
 
 def edit_bill_table(request, table_id):
+    print '=======edit_bill_table====='
     if request.method == 'POST':
         data = request.POST
         bill_table = Bill_table.objects.get(id=table_id)
@@ -140,10 +142,10 @@ def add_bill(request):
         if Item.objects.filter(code=data['item_code']):
             form = BillForm(data)
             form.save()
-            return redirect("/bill_table_detail/%s/?info=%s" % (data['bill_table'], "success"))
+            return redirect("/bill_table_detail/%s/?info=%s" % (data['bill_table'], u"成功添加"))
         else:
             #print "/bill_table_detail/%s/?info=%s" % (data['bill_table'], data['item_code']+" doesn't exsite")
-            return redirect("/bill_table_detail/%s/?info=%s" % (data['bill_table'], data['item_code']+" doesn't exsite"))
+            return redirect(u"/bill_table_detail/%s/?info=%s" % (data['bill_table'], data['item_code']+u" 不存在"))
             #info = data['item_code']+" doesn't exsite"
             #return redirect("/bill_table_detail/"+data['bill_table'], info=info)
     else:

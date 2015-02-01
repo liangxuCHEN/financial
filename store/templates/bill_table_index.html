@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Bill_table{% endblock %}
+{% block title %}账单{% endblock %}
 {% block nav %}
 <div class="navbar-collapse collapse">
     <ul class="nav navbar-nav">
@@ -10,8 +10,8 @@
 {% endblock %}
 {% block content %}
 <script type="text/javascript">
-  var no_pay_price = 0.0;
-  var pay_price = 0.0;
+  var no_pay_price = new Number(0.0);
+  var pay_price = new Number(0.0);
 </script>
 <div class="jumbotron" id="#error">
 {% if form.errors %}
@@ -30,12 +30,13 @@
 {% endif %}
 </div>
 
+
 <div class="jumbotron" id="table">
-  <form role="from" method="post" class="form-horizontal" action="">
   {% if bill_table_list %}
    <table class="table">
      <thead>
        <tr>
+       <form role="from" method="get" class="form-horizontal" action="/bill_table">
         <td>
           <input type="submit" value="搜索" class="btn btn-primary"/>
         </td>
@@ -49,44 +50,45 @@
         <td>备注</td>
         <td>总价</td>
         <td>
-        <select class="form-control" name="has_pay">
+          <select class="form-control" name="has_pay">
           <option >状态</option>
             <option value="no_pay">未付款</option>
             <option value="pay">已付款</option>
           </select>
-          </div>
         </td>
         <td>操作</td>
+      </form>
       </tr>
      </thead>
      <tbody>
-    {% for bill_table in bill_table_list %}
-    	<tr>
-    	<td>{{bill_table.id}}</td>
-    	<td>{{bill_table.created_at}}</td>
-    	<td>{{bill_table.comment}}</td>
-    	<td>{{bill_table.total_price}}</td>
-      {% if bill_table.is_pay %}
-      <td>已付款
-        <script type="text/javascript">
-          pay_price = {{ bill_table.total_price }} + pay_price;
-        </script>
-      </td>
-      {% else %}
-      <td>
-        未付款
-        <script type="text/javascript">
-          no_pay_price = {{ bill_table.total_price }} + no_pay_price;
-        </script>
-      </td>
-      {% endif %}
-      <td><a href="{% url 'bill_table_detail' bill_table.id %}">编辑</a></td>
-    	</tr>
-    {% endfor %}
-   </tbody>
+      {% for bill_table in bill_table_list %}
+      	<tr>
+      	<td>{{bill_table.id}}</td>
+      	<td>{{bill_table.created_at}}</td>
+      	<td>{{bill_table.comment}}</td>
+      	<td>{{bill_table.total_price}}</td>
+        {% if bill_table.is_pay %}
+        <td>已付款
+          <script type="text/javascript">
+            pay_price = {{ bill_table.total_price }} + pay_price;
+          </script>
+        </td>
+        {% else %}
+        <td>
+          未付款
+          <script type="text/javascript">
+            no_pay_price = {{ bill_table.total_price }} + no_pay_price;
+          </script>
+        </td>
+        {% endif %}
+        <td><a href="{% url 'bill_table_detail' bill_table.id %}">编辑</a></td>
+      	</tr>
+      {% endfor %}
+     </tbody>
    </table>
+ {% endif %}
    <div class="pull-right">
-     <ul class="pagination">
+      <ul class="pagination">
             {% if bill_table_list.has_previous %}
                 <li><a href="?page={{ bill_table_list.previous_page_number }}">prev</a></li>
             {% endif %}
@@ -103,27 +105,23 @@
             {% if bill_table_list.has_next %}
                <li> <a href="?page={{ bill_table_list.next_page_number }}">next</a></li>
             {% endif %}
-    </ul>
+      </ul>
   </div>
- {% endif %}
-
  <p class="bg-info">
-   <script type="text/javascript">
-   var total_price = no_pay_price + pay_price
-   var num = new Number(total_price);
-      document.write('未付款: '+ no_pay_price + '<br />' + '已付款: '+ pay_price + '<br />' + '合计: '+ num.toFixed(2));
-  </script>
-</p>
-</from>
- </div>
+    <script type="text/javascript">
+      var total_price = no_pay_price + pay_price
+      document.write('未付款: '+ no_pay_price.toFixed(2) + '<br />' + '已付款: '+ pay_price.toFixed(2) + '<br />' + '合计: '+ total_price.toFixed(2));
+    </script>
+  </p>
+</div>
 
- <div class="jumbotron" id="#form">
-<form action="{% url 'add_bill_table' %}" method="post" class="form-horizontal" role="form">
+<div class="jumbotron" id="#form">
+<form action="/bill_table_create" method="post" class="form-horizontal" role="form" id="create_bill_table">
 {% csrf_token %}
 <div class="form-group">
       <label class="col-sm-2 control-label">备注</label>
       <div class="col-sm-10">
-         <input type="text" class="form-control" name="comment" placeholder="添加备注" />
+         <input require="required" type="text" class="form-control" name="comment" placeholder="添加备注,如：客户姓名" />
       </div>
 </div>
 <div class="form-group">

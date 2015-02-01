@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {%block head %}
-{% block title %}Bill table Detail{% endblock %}
+{% block title %}账单{% endblock %}
 <script type="text/javascript">
 function delete_bill(bill_id)
   {
@@ -57,7 +57,8 @@ function delete_bill(bill_id)
   {% endfor %}
  </table>
  {% endif %}
- <p class="bg-info">总价 : {{ bill_table.total_price }}</p>
+ <p class="bg-info">总价 : {{ bill_table.total_price }} 
+ <h5>(如果删除了产品，请刷新页面)</h5></p>
  </div>
 
 

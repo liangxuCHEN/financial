@@ -14,7 +14,7 @@ urlpatterns = patterns('',
     url(r'^bill_table_create$',  views.add_bill_table, name='add_bill_table'),
     url(r'^bill_table_detail/(?P<table_id>\d+)/$', views.bill_table_detail, name='bill_table_detail'),
     url(r'^edit_bill_table/(?P<table_id>\d+)/$', views.edit_bill_table, name='edit_bill_table'),
-    url(r'^add_bill$', views.add_bill, name='add_bill'),
+    url(r'^add_bill', views.add_bill, name='add_bill'),
     url(r'^delete_bill/(?P<bill_id>\d+)/(?P<table_id>\d+)/$', views.delete_bill, name='delete_bill'),
     url(r'^admin/', include(admin.site.urls)),
 )
