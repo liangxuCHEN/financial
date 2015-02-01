@@ -1,31 +1,19 @@
  #-*- coding: utf-8 -*-
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
+#from django.contrib.auth import authenticate, login, logout
 from models import Item, Bill, Bill_table
 from django import forms
 from forms import ItemForm, BillTableForm,BillForm
 from django.utils import timezone
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 
-#move to tool.py
-def save_mul_item(text):
-    text=text.replace('\r\n', '')
-    items = text.split(";")
-    for item in items:
-        content = item.split(" ")
-        if len(content) == 3:
-            #is unique ?
-            try:
-                Item.objects.create(
-                    code=content[0],
-                    name=content[1],
-                    price=float(content[2])
-                )
-            except Exception as e:
-                print e
-# Create your views here.
+import tool
+import os
 
+
+# Create your views here.
 
 def item_index(request):
     content = {}
@@ -34,8 +22,7 @@ def item_index(request):
     return render(request, 'item.html', content)
 
 def add_one_item(request):
-    """if not request.user.is_authenticated():
-        return redirect('/login/?next=%s' % request.path)"""
+
     if request.method == 'POST':
         data = request.POST
         form = ItemForm(data)
@@ -50,7 +37,7 @@ def add_one_item(request):
 
 def add_multitems(request):
     if request.method == 'POST':
-        save_mul_item(request.POST['data'])
+        tool.save_mul_item(request.POST['data'])
         return HttpResponseRedirect('item')
     else:
         return render(request, 'multitem_create.html')
@@ -146,3 +133,29 @@ def delete_bill(request, bill_id, table_id):
     bill = Bill.objects.get(id=bill_id)
     bill.delete()
     return redirect("/bill_table_detail/"+table_id)
+
+def download_bill(request, table_id):
+    bills = Bill.objects.filter(bill_table_id=table_id)
+    data = {}
+    for bill in bills:
+        line = {}
+        line[str(bill.id)] = {
+            'id': bill.id,
+            'name': bill.item_code.name,
+            'code': bill.item_code.code,
+            'number': bill.number,
+            'price': bill.item_code.price,
+            'total_price': bill.number * bill.item_code.price,
+            'comment': bill.bill_comment,
+        }
+        data.update(line)
+    
+    filename = tool.create_xls(data)
+    f = open(filename)
+    file_data = f.read()
+    f.close()
+    response = HttpResponse(file_data, content_type='application/-excel')
+    response['Content-Length'] = os.path.getsize(filename)
+    response['Content-Encoding'] = 'utf-8'
+    response['Content-Disposition'] = 'attachment;filename=%s' % filename
+    return response
