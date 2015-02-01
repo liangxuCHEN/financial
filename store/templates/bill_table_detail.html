@@ -2,6 +2,7 @@
 {%block head %}
 {% block title %}账单{% endblock %}
 <script type="text/javascript">
+aItems = new Array();
 function delete_bill(bill_id)
   {
   var name=prompt("请输入您的名字","Liangxu");
@@ -23,6 +24,12 @@ function delete_bill(bill_id)
 </div>
 {% endblock %}
 {% block content %}
+{% for id in code %}
+<script type="text/javascript">
+  //var aItems = [] 
+  aItems.push(String({{id}}));
+</script>
+{% endfor %}
 <div class="jumbotron" id="#error">
 {% if info %}
    <div class="alert alert-info" role="alert">
@@ -51,7 +58,7 @@ function delete_bill(bill_id)
     </script>
     </td>
     <td>{{bill.created_at}}</td>
-    <td><a href="{% url 'delete_bill' bill.id bill_table.id %}" id="delete_bill">{{bill.bill_comment}}</a></td>
+    <td>{{bill.bill_comment}}</td>
     <td><button onclick="delete_bill({{bill.id}})" class="btn btn-danger">删除</button></td>
   	</tr>
   {% endfor %}

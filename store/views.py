@@ -56,7 +56,6 @@ def add_multitems(request):
         return render(request, 'multitem_create.html')
 
 def bill_table_index(request):
-    print '=======bill_table_index====='
     content = {}
     bill_tables = Bill_table.objects.all()
 
@@ -86,19 +85,15 @@ def bill_table_index(request):
     return render(request, 'bill_table_index.html', content)
 
 def add_bill_table(request):
-    print '=======add_bill_table====='
     if request.method == 'POST':
         data = request.POST
-        print data
         form = BillTableForm(data)
         form.save()
         return HttpResponseRedirect('bill_table')
     else:
-        print 'add_bill_table no post'
         return HttpResponseRedirect('bill_table')
 
 def edit_bill_table(request, table_id):
-    print '=======edit_bill_table====='
     if request.method == 'POST':
         data = request.POST
         bill_table = Bill_table.objects.get(id=table_id)
@@ -124,7 +119,6 @@ def bill_table_detail(request, table_id):
     for item in items:
         code.append(item.code)
     content["code"] =code
-    print content["code"]
     content['bill_list'] = Bill.objects.filter(bill_table_id=table_id)
     total_price = 0
     for bill in content['bill_list']:
@@ -144,10 +138,7 @@ def add_bill(request):
             form.save()
             return redirect("/bill_table_detail/%s/?info=%s" % (data['bill_table'], u"成功添加"))
         else:
-            #print "/bill_table_detail/%s/?info=%s" % (data['bill_table'], data['item_code']+" doesn't exsite")
             return redirect(u"/bill_table_detail/%s/?info=%s" % (data['bill_table'], data['item_code']+u" 不存在"))
-            #info = data['item_code']+" doesn't exsite"
-            #return redirect("/bill_table_detail/"+data['bill_table'], info=info)
     else:
         return redirect("/bill_table_detail/%s" % (data['bill_table']))
 
