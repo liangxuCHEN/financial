@@ -46,6 +46,10 @@ def bill_table_index(request):
     content = {}
     bill_tables = Bill_table.objects.all()
 
+    comment = request.GET.get('comment', '')
+    if comment != '':
+        bill_tables = bill_tables.filter(comment__contains=comment)
+    
     has_pay = request.GET.get('has_pay','')
     if has_pay == "pay":
         bill_tables = bill_tables.filter(is_pay=True)
