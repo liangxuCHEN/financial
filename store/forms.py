@@ -1,6 +1,6 @@
  #-*- coding: utf-8 -*-
 from django import forms
-from models import Item, Bill, Bill_table
+from store.models import Item, Bill, Bill_table
 from django.utils import timezone
 
 class ItemForm(forms.ModelForm):

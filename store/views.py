@@ -3,13 +3,13 @@ from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 #from django.contrib.auth import authenticate, login, logout
-from models import Item, Bill, Bill_table
+from store.models import Item, Bill, Bill_table
 from django import forms
-from forms import ItemForm, BillTableForm,BillForm
+from store.forms import ItemForm, BillTableForm,BillForm
 from django.utils import timezone
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 
-import tool
+import store.tool
 import os
 
 

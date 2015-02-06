@@ -1,5 +1,5 @@
  #-*- coding: utf-8 -*-
-from models import Item
+from store.models import Item
 from xlwt import Workbook
 import datetime
 
@@ -17,7 +17,7 @@ def save_mul_item(text):
                     price=float(content[2])
                 )
             except Exception as e:
-                print e
+                pass
 
 def create_xls(data):
     work = Workbook(encoding='utf-8')
