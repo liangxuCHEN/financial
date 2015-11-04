@@ -5,7 +5,7 @@ from store import views
 
 urlpatterns = patterns('',
     # Examples:
-    url(r'^$', TemplateView.as_view(template_name="index.html")),
+    url(r'^$', views.home_page, name='home_page'),
     # url(r'^blog/', include('blog.urls')),
     url(r'^item$',  views.item_index, name='item_index'),
     url(r'^item_creat$',  views.add_one_item, name='add_one_item'),
@@ -17,5 +17,7 @@ urlpatterns = patterns('',
     url(r'^add_bill', views.add_bill, name='add_bill'),
     url(r'^delete_bill/(?P<bill_id>\d+)/(?P<table_id>\d+)/$', views.delete_bill, name='delete_bill'),
     url(r'^download_bill/(?P<table_id>\d+)/$', views.download_bill, name='download_bill'),
+    url(r'^login$', views.LoginView, name='login'),
+    url(r'^logout$', views.LogoutView, name='logout'),
     url(r'^admin/', include(admin.site.urls)),
 )

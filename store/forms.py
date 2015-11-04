@@ -40,3 +40,13 @@ class BillForm(forms.ModelForm):
             number=self.data['number'],
             bill_comment=self.data['bill_comment'],
         )
+        
+class AuthenticationForm(forms.Form):
+            """
+            Login form
+            """
+            username = forms.CharField(widget=forms.TextInput())
+            password = forms.CharField(widget=forms.PasswordInput())
+
+            class Meta:
+                fields = ['username', 'password']
