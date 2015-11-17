@@ -1,13 +1,5 @@
 {% extends "base.html" %}
 {% block title %}产品列表{% endblock %}
-{% block nav %}
-<div class="navbar-collapse collapse">
-    <ul class="nav navbar-nav">
-        <li ><a href="{%url 'item_index' %}">产品列表</a></li>
-        <li ><a href="{%url 'bill_table_index' %}">账单</a></li>
-    </ul>
-</div>
-{% endblock %}
 {% block content %}
 <div class="jumbotron" id="item">
 {% if item_list %}

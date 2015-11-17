@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="author" content="Louis">
     <link rel="icon" href="../../favicon.ico">
 
     <!-- Bootstrap core CSS -->
@@ -42,7 +42,14 @@
             </button>
             <a class="navbar-brand" href="/">出货系统</a>
         </div>
-         <div id="navbar" class="navbar-collapse collapse">{% block nav %}{% endblock %}</div>
+         <div id="navbar" class="navbar-collapse collapse">
+           <div class="navbar-collapse collapse">
+             <ul class="nav navbar-nav">
+                 <li ><a href="{%url 'item_index' %}">产品列表</a></li>
+                 <li ><a href="{%url 'bill_table_index' %}">账单</a></li>
+             </ul>
+          </div>{% block nav %}{% endblock %}
+        </div>
 </div>
 
 </nav>
@@ -59,9 +66,10 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
+     <script src="/static/js/jquery.min.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
     <script src="/static/js/docs.min.js"></script>
-    <script src="/static/js/jquery.min.js"></script>
+   
     {% block script %}
     
     {% endblock %}

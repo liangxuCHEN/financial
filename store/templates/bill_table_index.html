@@ -1,13 +1,5 @@
 {% extends "base.html" %}
 {% block title %}账单{% endblock %}
-{% block nav %}
-<div class="navbar-collapse collapse">
-    <ul class="nav navbar-nav">
-        <li ><a href="{%url 'item_index' %}">产品列表</a></li>
-        <li ><a href="{%url 'bill_table_index' %}">账单</a></li>
-    </ul>
-</div>
-{% endblock %}
 {% block content %}
 <script type="text/javascript">
   var no_pay_price = new Number(0.0);
