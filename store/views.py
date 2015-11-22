@@ -61,21 +61,28 @@ def bill_table_index(request):
     if request.user.is_authenticated():
         content = {}
         bill_tables = Bill_table.objects.all()
-
+        #is it admin, if it is admin , he can see all the bill and use the filter
+        #if not, the emploer only see the bill of himself and can not use the filter
+        if not request.user.is_staff:
+             bill_tables = bill_tables.filter(comment__contains=request.user.first_name)
+        
         comment = request.GET.get('comment', '')
         if comment != '':
             bill_tables = bill_tables.filter(comment__contains=comment)
-        
+            
         has_pay = request.GET.get('has_pay','')
         if has_pay == "pay":
             bill_tables = bill_tables.filter(is_pay=True)
         if has_pay == "no_pay":
             bill_tables = bill_tables.filter(is_pay=False)
-
+        
         order_date = request.GET.get('order_date','down')
         if order_date == "down":
             bill_tables = bill_tables.order_by("-created_at")
+
+        
         #pages
+        content['name'] = request.user.first_name
         page_size =  10
         paginator = Paginator(bill_tables, page_size)
         try:
